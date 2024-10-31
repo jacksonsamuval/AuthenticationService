@@ -41,7 +41,7 @@ public class SecurityConfig
 		http
 				.csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
-						.requestMatchers("signup", "auth/login","/auth/login", "auth/resetPassword","/auth/resetPassword","auth/register","/auth/register","auth/forgotPassword","auth/home","auth/hello","verifyOtp","/verifyOtp","/updatePassword","/validate","validate").permitAll().anyRequest().authenticated())
+						.requestMatchers("signup", "auth/login","/auth/login", "auth/resetPassword","/auth/resetPassword","auth/register","/auth/register","auth/forgotPassword","auth/home","auth/hello","verifyOtp","/verifyOtp","/updatePassword","/validate","validate","auth/otpVerifiaction","/auth/otpVerifiaction","/auth/resendOtp","auth/resendOtp").permitAll().anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(session -> 
 							session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

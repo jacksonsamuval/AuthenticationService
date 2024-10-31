@@ -95,32 +95,16 @@ public class HomeAuthController {
 	{
 		String email = passwordResetRequest.getEmail();
 		String otp = otpService.generateOtp();
-		
+		Optional<PasswordResetToken> resetToken = passwordResetTokenRepository.findByEmail(email);
+		if(resetToken.isPresent())
+		{
+			passwordResetTokenRepository.delete(resetToken.get());
+		}
 		otpService.saveOtp(email,otp);
 		emailService.sendOtpEmail(email,otp);
 		
 		return new ResponseEntity<>("OTP sent to email", HttpStatus.OK);
 		
-	}
-	
-	@PostMapping("resetPassword")
-	public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) 
-	{
-		 String email = request.getEmail();
-		 String otp = request.getOtp();
-		 String newPassword = request.getNewPassword();
-		 
-		 Optional<PasswordResetToken> tokenOpt = passwordResetTokenRepository.findByEmailAndOtp(email, otp);
-		 
-		 if (tokenOpt.isEmpty() || tokenOpt.get().isExpired()) {
-		        return new ResponseEntity<>("Invalid or expired OTP", HttpStatus.BAD_REQUEST);
-		    }
-		 
-		 Ulogin user = userService.findUserByEmail(email);
-		 userService.saveUser(user);
-		 user.setPassword(newPassword);
-		 passwordResetTokenRepository.delete(tokenOpt.get());
-		 return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
 	}
 	
 	@GetMapping("validate")
@@ -133,5 +117,44 @@ public class HomeAuthController {
         }
     }
 	
+	//testing
+	
+	@PostMapping("otpVerifiaction")
+	public ResponseEntity<String> otpverified(@RequestBody VerificationRequest verificationRequest)
+	{
+		return userService.otpVerified(verificationRequest);
+	}
+	
+	@PostMapping("resendOtp")
+	public ResponseEntity<String> resendOtp(@RequestBody PasswordResetRequest passwordResetRequest) {
+	    
+		return userService.resendOtp(passwordResetRequest);
+	}
+	
+	@PostMapping("resetPassword")
+	public ResponseEntity<String> resetPasswordRequest(@RequestBody ResetPasswordRequest request) {
+	    
+		return userService.resetPassword(request);
+	}
+
+//	@PostMapping("resetPassword")
+//	public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) 
+//	{
+//		 String email = request.getEmail();
+//		 String otp = request.getOtp();
+//		 String newPassword = request.getNewPassword();
+//		 
+//		 Optional<PasswordResetToken> tokenOpt = passwordResetTokenRepository.findByEmailAndOtp(email, otp);
+//		 
+//		 if (tokenOpt.isEmpty() || tokenOpt.get().isExpired()) {
+//		        return new ResponseEntity<>("Invalid or expired OTP", HttpStatus.BAD_REQUEST);
+//		    }
+//		 
+//		 Ulogin user = userService.findUserByEmail(email);
+//		 userService.saveUser(user);
+//		 user.setPassword(newPassword);
+//		 passwordResetTokenRepository.delete(tokenOpt.get());
+//		 return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
+//	}
 	
 }

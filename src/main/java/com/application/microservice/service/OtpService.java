@@ -5,6 +5,7 @@ import com.application.microservice.repo.PasswordResetTokenRepository;
 import com.application.microservice.entity.PasswordResetToken;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -12,6 +13,9 @@ public class OtpService {
 	
 	@Autowired
 	private PasswordResetTokenRepository passwordResetTokenRepository;
+	
+	@Autowired
+	
 	
 	public String generateOtp()
 	{
@@ -27,6 +31,11 @@ public class OtpService {
 		resetToken.setOtp(otp);
 		resetToken.setExpiryDate(Instant.now().plus(Duration.ofMinutes(10)));
 		passwordResetTokenRepository.save(resetToken);
+	}
+
+	public boolean isExpired(PasswordResetToken passwordResetToken) {
+		Optional<PasswordResetToken> passwordResetToken1 = passwordResetTokenRepository.findByEmail(passwordResetToken.getEmail());
+		return passwordResetToken1.get().isExpired();
 	}
 
 }

@@ -15,6 +15,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -41,7 +43,7 @@ public class SecurityConfig
 		http
 				.csrf(customizer -> customizer.disable())
 				.authorizeHttpRequests(request -> request
-						.requestMatchers("signup", "auth/login","/auth/login", "auth/resetPassword","/auth/resetPassword","auth/register","/auth/register","auth/forgotPassword","auth/home","auth/hello","verifyOtp","/verifyOtp","/updatePassword","/validate","validate","auth/otpVerifiaction","/auth/otpVerifiaction","/auth/resendOtp","auth/resendOtp").permitAll().anyRequest().authenticated())
+						.requestMatchers("signup", "auth/login","/auth/login", "auth/resetPassword","/auth/resetPassword","auth/register","/auth/register","auth/forgotPassword","auth/home","auth/hello","verifyOtp","/verifyOtp","/updatePassword","/validate","validate","auth/otpVerification","/auth/otpVerification","/auth/resendOtp","auth/resendOtp").permitAll().anyRequest().authenticated())
 				.httpBasic(Customizer.withDefaults())
 				.sessionManagement(session -> 
 							session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -55,4 +57,13 @@ public class SecurityConfig
 	{
 		return config.getAuthenticationManager();
 	}
+	
+//	    @Override
+//	    public void addCorsMappings(CorsRegistry registry) {
+//	        registry.addMapping("/**") 
+//	                .allowedOrigins("http://localhost:5173/") 
+//	                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+//	                .allowedHeaders("*")
+//	                .allowCredentials(true); 
+//	    }
 }

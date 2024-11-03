@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -100,6 +101,11 @@ public class HomeAuthController {
 		{
 			passwordResetTokenRepository.delete(resetToken.get());
 		}
+		 if (!userService.existsByEmail(email)) {
+		        return new ResponseEntity<>("Email not found", HttpStatus.NOT_FOUND);
+		    }
+		
+		
 		otpService.saveOtp(email,otp);
 		emailService.sendOtpEmail(email,otp);
 		
@@ -119,7 +125,7 @@ public class HomeAuthController {
 	
 	//testing
 	
-	@PostMapping("otpVerifiaction")
+	@PostMapping("otpVerification")
 	public ResponseEntity<String> otpverified(@RequestBody VerificationRequest verificationRequest)
 	{
 		return userService.otpVerified(verificationRequest);

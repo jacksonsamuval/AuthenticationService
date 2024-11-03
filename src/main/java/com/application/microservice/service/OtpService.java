@@ -29,7 +29,7 @@ public class OtpService {
 		PasswordResetToken resetToken = new PasswordResetToken();
 		resetToken.setEmail(email);
 		resetToken.setOtp(otp);
-		resetToken.setExpiryDate(Instant.now().plus(Duration.ofMinutes(10)));
+		resetToken.setExpiryDate(Instant.now().plus(Duration.ofMinutes(5)));
 		passwordResetTokenRepository.save(resetToken);
 	}
 

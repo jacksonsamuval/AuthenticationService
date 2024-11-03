@@ -65,15 +65,15 @@ public class UserService {
 		Optional<PasswordResetToken> tokenOtp = passwordResetTokenRepository.findByEmailAndOtp(email,otp);
 		if (tokenOtp.isPresent()) {
 		    if (tokenOtp.get().isExpired()) {
-		        return new ResponseEntity<>("Otp Expired", HttpStatus.BAD_REQUEST);
+		        return new ResponseEntity<>("Otp Expired", HttpStatus.UNAUTHORIZED);
 		    }
 		    if (!tokenOtp.get().getOtp().equals(otp)) {
-		        return new ResponseEntity<>("Otp Not Valid", HttpStatus.BAD_REQUEST);
+		        return new ResponseEntity<>("Otp Not Valid", HttpStatus.FORBIDDEN);
 		    }
 		    passwordResetTokenRepository.delete(tokenOtp.get());
 		    return new ResponseEntity<>("Otp Successfully verified", HttpStatus.OK);
 		} else {
-		    return new ResponseEntity<>("Otp Not Valid", HttpStatus.BAD_REQUEST);
+		    return new ResponseEntity<>("Otp Not Valid", HttpStatus.NOT_FOUND);
 		}
 
 	}
@@ -111,6 +111,12 @@ public class UserService {
 	    repo.save(user);
 
 	    return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
+	}
+
+	public boolean existsByEmail(String email) {
+
+		return repo.existsByEmail(email);
+		
 	}
 
 	

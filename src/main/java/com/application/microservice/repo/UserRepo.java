@@ -20,6 +20,8 @@ public interface UserRepo extends JpaRepository<Ulogin, Integer> {
 	
 	Optional<Ulogin> findByEmail(String email);
 
+	boolean existsByEmail(String email);
+
 	
 	
 
